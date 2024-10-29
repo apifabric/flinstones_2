@@ -1,0 +1,53 @@
+<div class="container">
+<o-form-container breadcrumb="yes" breadcrumb-label-columns="id" breadcrumb-separator=", " class="fill-form">
+      <o-form #form attr="HolodeckReservation_form_edit" 
+        service="HolodeckReservation" 
+        entity="HolodeckReservation" 
+        fxLayout="column" 
+        show-header="yes" 
+        header-actions="R;I;U;D"
+        #oDetailForm keys="id" 
+        keys-sql-types="INTEGER" 
+        show-header-navigation="yes"
+        (onDataLoaded)="onDataLoaded($event)">
+
+  <o-row attr="row1" layout-align="start stretch">
+    <div fxLayout="row wrap" fxLayoutAlign="start start" fxFlex fxLayoutGap="14px">
+      
+      <o-integer-input #id attr="id" label=" id*" type="integer" editable="no" required="no" ></o-integer-input>
+      
+      <o-list-picker 
+        attr="crew_member_id"
+        service="CrewMember" 
+        entity="CrewMemberType"
+        fxFlex="30" 
+        query-on-init="no" 
+        query-on-bind="yes" 
+        required="yes" 
+        enabled="yes" 
+        filter="yes"
+        value-column="id" 
+        value-column-type="INTEGER"  
+        keys="id" 
+        columns="id;crew_member_id;name" 
+        title="crew_member_id"
+        visible-columns="id;name" 
+        separator=" - " width="680px" class="form-field">
+</o-list-picker>
+      
+      <o-date-input #reserved_from attr="reserved_from" type="timestamp" label="reserved_from" editable="no" required="yes" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+      
+      <o-date-input #reserved_to attr="reserved_to" type="timestamp" label="reserved_to" editable="no" required="yes" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+      
+      <o-text-input #purpose attr="purpose" label="purpose" enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
+      
+    </div>
+  </o-row>
+      
+      <mat-tab-group fxFill>
+        
+      </mat-tab-group>
+      
+    </o-form>
+  </o-form-container>
+</div>

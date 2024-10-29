@@ -1,0 +1,124 @@
+// Copy this text, paste to https://dbdiagram.io/d
+// Or, https://databasediagram.com/app
+// Or, view in VSCode with extension: "DBML Live Preview"
+
+Project DBML {
+  Note: '''
+Badge: Badges awarded to crew members for achievements.
+CrewBadge: Association table linking crew members with badges earned.
+CrewMember: the crew members aboard a starship.
+Destination: Landing and travel destination for starship tours.
+Equipment: Equipment available for missions.
+Starship: Table for starships available for planning the holiday.
+HolodeckReservation: Reservations for the use of the ship's holodeck for training or leisure.
+LogEntry: Log entries by crew members recording observations and events.
+Mission: Holiday missions or events planned during the star trek themed holiday.
+Reservation: Reservations for a starship to a destination.
+Supply: Supplies needed for a mission to function smoothly.
+Transmission: Table recording important mission communications.
+'''
+}
+
+Table Badge {
+    id INTEGER [primary key]
+    name VARCHAR 
+    description VARCHAR 
+    }
+
+Table CrewBadge {
+    id INTEGER [primary key]
+    crew_member_id INTEGER 
+    badge_id INTEGER 
+    date_awarded DATETIME 
+    }
+
+Table CrewMember {
+    id INTEGER [primary key]
+    name VARCHAR 
+    rank VARCHAR 
+    position VARCHAR 
+    }
+
+Table Destination {
+    id INTEGER [primary key]
+    name VARCHAR 
+    sector VARCHAR 
+    description VARCHAR 
+    }
+
+Table Equipment {
+    id INTEGER [primary key]
+    name VARCHAR 
+    starship_id INTEGER 
+    quantity INTEGER 
+    }
+
+Table Starship {
+    id INTEGER [primary key]
+    name VARCHAR 
+    class_type VARCHAR 
+    capacity INTEGER 
+    }
+
+Table HolodeckReservation {
+    id INTEGER [primary key]
+    crew_member_id INTEGER 
+    reserved_from DATETIME 
+    reserved_to DATETIME 
+    purpose VARCHAR 
+    }
+
+Table LogEntry {
+    id INTEGER [primary key]
+    crew_member_id INTEGER 
+    mission_id INTEGER 
+    entry_date DATETIME 
+    content VARCHAR 
+    }
+
+Table Mission {
+    id INTEGER [primary key]
+    name VARCHAR 
+    start_date DATETIME 
+    end_date DATETIME 
+    description VARCHAR 
+    }
+
+Table Reservation {
+    id INTEGER [primary key]
+    crew_member_id INTEGER 
+    starship_id INTEGER 
+    destination_id INTEGER 
+    mission_id INTEGER 
+    date DATETIME 
+    }
+
+Table Supply {
+    id INTEGER [primary key]
+    name VARCHAR 
+    mission_id INTEGER 
+    quantity INTEGER 
+    }
+
+Table Transmission {
+    id INTEGER [primary key]
+    mission_id INTEGER 
+    content VARCHAR 
+    timestamp DATETIME 
+    }
+
+
+
+// Relationships
+    Ref: CrewBadge.(badge_id) < Badge.(id)
+    Ref: CrewBadge.(crew_member_id) < CrewMember.(id)
+    Ref: Equipment.(starship_id) < Starship.(id)
+    Ref: HolodeckReservation.(crew_member_id) < CrewMember.(id)
+    Ref: LogEntry.(crew_member_id) < CrewMember.(id)
+    Ref: LogEntry.(mission_id) < Mission.(id)
+    Ref: Reservation.(crew_member_id) < CrewMember.(id)
+    Ref: Reservation.(destination_id) < Destination.(id)
+    Ref: Reservation.(mission_id) < Mission.(id)
+    Ref: Reservation.(starship_id) < Starship.(id)
+    Ref: Supply.(mission_id) < Mission.(id)
+    Ref: Transmission.(mission_id) < Mission.(id)

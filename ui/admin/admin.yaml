@@ -1,0 +1,370 @@
+about:
+  date: October 29, 2024 11:28:42
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+info:
+  number_relationships: 12
+  number_tables: 12
+info_toggle_checked: true
+resources:
+  Badge:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: description
+    - name: id
+    description: Badges awarded to crew members for achievements.
+    info_list: Badges awarded to crew members for achievements.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - badge_id
+      name: CrewBadgeList
+      resource: CrewBadge
+    type: Badge
+    user_key: name
+  CrewBadge:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: badge_id
+      required: true
+    - name: crew_member_id
+      required: true
+    - name: date_awarded
+      required: true
+      type: DATETIME
+    description: Association table linking crew members with badges earned.
+    info_list: Association table linking crew members with badges earned.
+    tab_groups:
+    - direction: toone
+      fks:
+      - badge_id
+      name: badge
+      resource: Badge
+    - direction: toone
+      fks:
+      - crew_member_id
+      name: crew_member
+      resource: CrewMember
+    type: CrewBadge
+    user_key: id
+  CrewMember:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: rank
+    - name: position
+    - name: id
+    description: Table representing the crew members aboard a starship.
+    info_list: Table representing the crew members aboard a starship.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - crew_member_id
+      name: CrewBadgeList
+      resource: CrewBadge
+    - direction: tomany
+      fks:
+      - crew_member_id
+      name: HolodeckReservationList
+      resource: HolodeckReservation
+    - direction: tomany
+      fks:
+      - crew_member_id
+      name: LogEntryList
+      resource: LogEntry
+    - direction: tomany
+      fks:
+      - crew_member_id
+      name: ReservationList
+      resource: Reservation
+    type: CrewMember
+    user_key: name
+  Destination:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: sector
+    - name: description
+    - name: id
+    description: Landing and travel destination for starship tours.
+    info_list: Landing and travel destination for starship tours.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - destination_id
+      name: ReservationList
+      resource: Reservation
+    type: Destination
+    user_key: name
+  Equipment:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: starship_id
+      required: true
+    - name: quantity
+    - name: id
+    description: Equipment available for missions.
+    info_list: Equipment available for missions.
+    tab_groups:
+    - direction: toone
+      fks:
+      - starship_id
+      name: starship
+      resource: Starship
+    type: Equipment
+    user_key: name
+  HolodeckReservation:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: crew_member_id
+      required: true
+    - name: reserved_from
+      required: true
+      type: DATETIME
+    - name: reserved_to
+      required: true
+      type: DATETIME
+    - name: purpose
+    description: Reservations for the use of the ship's holodeck for training or leisure.
+    info_list: Reservations for the use of the ship's holodeck for training or leisure.
+    tab_groups:
+    - direction: toone
+      fks:
+      - crew_member_id
+      name: crew_member
+      resource: CrewMember
+    type: HolodeckReservation
+    user_key: id
+  LogEntry:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: crew_member_id
+      required: true
+    - name: mission_id
+      required: true
+    - name: entry_date
+      required: true
+      type: DATETIME
+    - name: content
+      required: true
+    description: Log entries by crew members recording observations and events.
+    info_list: Log entries by crew members recording observations and events.
+    tab_groups:
+    - direction: toone
+      fks:
+      - crew_member_id
+      name: crew_member
+      resource: CrewMember
+    - direction: toone
+      fks:
+      - mission_id
+      name: mission
+      resource: Mission
+    type: LogEntry
+    user_key: id
+  Mission:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: start_date
+      required: true
+      type: DATETIME
+    - name: end_date
+      type: DATETIME
+    - name: description
+    - name: id
+    description: Holiday missions or events planned during the star trek themed holiday.
+    info_list: Holiday missions or events planned during the star trek themed holiday.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - mission_id
+      name: LogEntryList
+      resource: LogEntry
+    - direction: tomany
+      fks:
+      - mission_id
+      name: ReservationList
+      resource: Reservation
+    - direction: tomany
+      fks:
+      - mission_id
+      name: SupplyList
+      resource: Supply
+    - direction: tomany
+      fks:
+      - mission_id
+      name: TransmissionList
+      resource: Transmission
+    type: Mission
+    user_key: name
+  Reservation:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: crew_member_id
+      required: true
+    - name: destination_id
+      required: true
+    - name: mission_id
+      required: true
+    - name: starship_id
+      required: true
+    - name: date
+      required: true
+      type: DATETIME
+    description: Reservations for a starship to a destination.
+    info_list: Reservations for a starship to a destination.
+    tab_groups:
+    - direction: toone
+      fks:
+      - crew_member_id
+      name: crew_member
+      resource: CrewMember
+    - direction: toone
+      fks:
+      - destination_id
+      name: destination
+      resource: Destination
+    - direction: toone
+      fks:
+      - mission_id
+      name: mission
+      resource: Mission
+    - direction: toone
+      fks:
+      - starship_id
+      name: starship
+      resource: Starship
+    type: Reservation
+    user_key: id
+  Starship:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: class_type
+    - name: capacity
+    - name: id
+    description: Table for starships available for planning the holiday.
+    info_list: Table for starships available for planning the holiday.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - starship_id
+      name: EquipmentList
+      resource: Equipment
+    - direction: tomany
+      fks:
+      - starship_id
+      name: ReservationList
+      resource: Reservation
+    type: Starship
+    user_key: name
+  Supply:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: mission_id
+      required: true
+    - name: quantity
+    - name: id
+    description: Supplies needed for a mission to function smoothly.
+    info_list: Supplies needed for a mission to function smoothly.
+    tab_groups:
+    - direction: toone
+      fks:
+      - mission_id
+      name: mission
+      resource: Mission
+    type: Supply
+    user_key: name
+  Transmission:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: mission_id
+      required: true
+    - name: content
+      required: true
+    - name: timestamp
+      required: true
+      type: DATETIME
+    description: Table recording important mission communications.
+    info_list: Table recording important mission communications.
+    tab_groups:
+    - direction: toone
+      fks:
+      - mission_id
+      name: mission
+      resource: Mission
+    type: Transmission
+    user_key: id
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    detail_mode: tab
+    edit_on_mode: dblclick
+    exclude_listpicker: false
+    include_translation: 'false'
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    new_mode: dialog
+    pick_style: list
+    row_height: small,
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: 'false'

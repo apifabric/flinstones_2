@@ -1,0 +1,548 @@
+about:
+  date: October 29, 2024 11:28:42
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+entities:
+  Badge:
+    columns:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR
+    - name: description
+      template: text
+      type: VARCHAR
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Badges awarded to crew members for achievements.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: name
+    home_template: home_template.html
+    info_list: Badges awarded to crew members for achievements.
+    label: Badge
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - badge_id
+      name: CrewBadgeList
+      resource: CrewBadge
+    type: Badge
+  CrewBadge:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: badge_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: crew_member_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: date_awarded
+      required: true
+      type: DATETIME
+    description: Association table linking crew members with badges earned.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Association table linking crew members with badges earned.
+    label: CrewBadge
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - badge_id
+      name: badge
+      resource: Badge
+    - direction: toone
+      fks:
+      - crew_member_id
+      name: crew_member
+      resource: CrewMember
+    type: CrewBadge
+  CrewMember:
+    columns:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR
+    - name: rank
+      template: text
+      type: VARCHAR
+    - name: position
+      template: text
+      type: VARCHAR
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Table representing the crew members aboard a starship.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: name
+    home_template: home_template.html
+    info_list: Table representing the crew members aboard a starship.
+    label: CrewMember
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - crew_member_id
+      name: CrewBadgeList
+      resource: CrewBadge
+    - direction: tomany
+      fks:
+      - crew_member_id
+      name: HolodeckReservationList
+      resource: HolodeckReservation
+    - direction: tomany
+      fks:
+      - crew_member_id
+      name: LogEntryList
+      resource: LogEntry
+    - direction: tomany
+      fks:
+      - crew_member_id
+      name: ReservationList
+      resource: Reservation
+    type: CrewMember
+  Destination:
+    columns:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR
+    - name: sector
+      template: text
+      type: VARCHAR
+    - name: description
+      template: text
+      type: VARCHAR
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Landing and travel destination for starship tours.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: name
+    home_template: home_template.html
+    info_list: Landing and travel destination for starship tours.
+    label: Destination
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - destination_id
+      name: ReservationList
+      resource: Reservation
+    type: Destination
+  Equipment:
+    columns:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR
+    - name: starship_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: quantity
+      template: integer
+      type: INTEGER
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Equipment available for missions.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: name
+    home_template: home_template.html
+    info_list: Equipment available for missions.
+    label: Equipment
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - starship_id
+      name: starship
+      resource: Starship
+    type: Equipment
+  HolodeckReservation:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: crew_member_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: reserved_from
+      required: true
+      type: DATETIME
+    - name: reserved_to
+      required: true
+      type: DATETIME
+    - name: purpose
+      template: text
+      type: VARCHAR
+    description: Reservations for the use of the ship's holodeck for training or leisure.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Reservations for the use of the ship's holodeck for training or leisure.
+    label: HolodeckReservation
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - crew_member_id
+      name: crew_member
+      resource: CrewMember
+    type: HolodeckReservation
+  LogEntry:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: crew_member_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: mission_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: entry_date
+      required: true
+      type: DATETIME
+    - name: content
+      required: true
+      template: text
+      type: VARCHAR
+    description: Log entries by crew members recording observations and events.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Log entries by crew members recording observations and events.
+    label: LogEntry
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - crew_member_id
+      name: crew_member
+      resource: CrewMember
+    - direction: toone
+      fks:
+      - mission_id
+      name: mission
+      resource: Mission
+    type: LogEntry
+  Mission:
+    columns:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR
+    - name: start_date
+      required: true
+      type: DATETIME
+    - name: end_date
+      type: DATETIME
+    - name: description
+      template: text
+      type: VARCHAR
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Holiday missions or events planned during the star trek themed holiday.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: name
+    home_template: home_template.html
+    info_list: Holiday missions or events planned during the star trek themed holiday.
+    label: Mission
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - mission_id
+      name: LogEntryList
+      resource: LogEntry
+    - direction: tomany
+      fks:
+      - mission_id
+      name: ReservationList
+      resource: Reservation
+    - direction: tomany
+      fks:
+      - mission_id
+      name: SupplyList
+      resource: Supply
+    - direction: tomany
+      fks:
+      - mission_id
+      name: TransmissionList
+      resource: Transmission
+    type: Mission
+  Reservation:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: crew_member_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: destination_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: mission_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: starship_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: date
+      required: true
+      type: DATETIME
+    description: Reservations for a starship to a destination.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Reservations for a starship to a destination.
+    label: Reservation
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - crew_member_id
+      name: crew_member
+      resource: CrewMember
+    - direction: toone
+      fks:
+      - destination_id
+      name: destination
+      resource: Destination
+    - direction: toone
+      fks:
+      - mission_id
+      name: mission
+      resource: Mission
+    - direction: toone
+      fks:
+      - starship_id
+      name: starship
+      resource: Starship
+    type: Reservation
+  Starship:
+    columns:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR
+    - name: class_type
+      template: text
+      type: VARCHAR
+    - name: capacity
+      template: integer
+      type: INTEGER
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Table for starships available for planning the holiday.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: name
+    home_template: home_template.html
+    info_list: Table for starships available for planning the holiday.
+    label: Starship
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - starship_id
+      name: EquipmentList
+      resource: Equipment
+    - direction: tomany
+      fks:
+      - starship_id
+      name: ReservationList
+      resource: Reservation
+    type: Starship
+  Supply:
+    columns:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR
+    - name: mission_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: quantity
+      template: integer
+      type: INTEGER
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Supplies needed for a mission to function smoothly.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: name
+    home_template: home_template.html
+    info_list: Supplies needed for a mission to function smoothly.
+    label: Supply
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - mission_id
+      name: mission
+      resource: Mission
+    type: Supply
+  Transmission:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: mission_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: content
+      required: true
+      template: text
+      type: VARCHAR
+    - name: timestamp
+      required: true
+      type: DATETIME
+    description: Table recording important mission communications.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Table recording important mission communications.
+    label: Transmission
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - mission_id
+      name: mission
+      resource: Mission
+    type: Transmission
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    edit_on_mode: dblclick
+    exclude_listpicker: false
+    include_translation: false
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    mode: tab
+    pick_style: list
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: false
